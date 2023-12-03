@@ -8,18 +8,37 @@
 import UIKit
 
 class ViewController: UIViewController {
+    private var listOfWords = [ "buccaneer", "swift", "glorious",
+    "incandescent", "bug", "program"]
+    private let incorrectMovesAllowed = 7
+    private var totalWins = 0
+    private var totalLosses = 0
+    private var currentGame: Game!
 
-    @IBOutlet var lettersButtons: [UIButton]!
-    @IBOutlet weak var scoreLabel: UILabel!
-    @IBOutlet weak var correctWordLabel: UILabel!
-    @IBOutlet weak var treeImageView: UIImageView!
+    @IBOutlet private var lettersButtons: [UIButton]!
+    @IBOutlet private weak var scoreLabel: UILabel!
+    @IBOutlet private weak var correctWordLabel: UILabel!
+    @IBOutlet private weak var treeImageView: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        newRound()
+    }
+    
+    private func newRound() {
+        let newWord = listOfWords.removeFirst()
+        currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed)
+        updateUI()
+    }
+    
+    private func updateUI() {
+        scoreLabel.text = "Wins: \(totalWins), Losses: \(totalLosses)"
+        treeImageView.image = UIImage(named: "Tree \(currentGame.incorrectMovesRemaining)")
     }
 
-    @IBAction func letterButtonPressed(_ sender: UIButton) {
+    @IBAction private func letterButtonPressed(_ sender: UIButton) {
         sender.isEnabled = false
+        
     }
     
 }
