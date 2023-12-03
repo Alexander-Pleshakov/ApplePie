@@ -27,17 +27,28 @@ class ViewController: UIViewController {
     
     private func newRound() {
         let newWord = listOfWords.removeFirst()
-        currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed)
+        currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed, guessedLetters: [])
         updateUI()
     }
     
     private func updateUI() {
+        var letters = [String]()
+        for letter in currentGame.formattedWord {
+            letters.append(String(letter))
+        }
+        letters[0] = letters[0].uppercased()
+        var wordWithSpacing = letters.joined(separator: " ")
         scoreLabel.text = "Wins: \(totalWins), Losses: \(totalLosses)"
         treeImageView.image = UIImage(named: "Tree \(currentGame.incorrectMovesRemaining)")
+        correctWordLabel.text = wordWithSpacing
     }
 
     @IBAction private func letterButtonPressed(_ sender: UIButton) {
         sender.isEnabled = false
+        let letterString = sender.configuration!.title!
+        let letter = Character(letterString.lowercased())
+        currentGame.playerGuessed(letter: letter)
+        updateUI()
         
     }
     
